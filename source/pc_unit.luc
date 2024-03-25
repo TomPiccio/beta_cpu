@@ -66,7 +66,7 @@ module pc_unit (
     
     // output connections
     ia = pc.q;
-    pc_4 =  c{pc.q[31],pc_4_sig[30:2],2b00};
+    pc_4 =  pc_4_sig;
     pc_4_sxtc = pc_4_sxtc_sig;
     pcsel_out = pcsel_out_sig;
     

@@ -6,14 +6,8 @@ module fa (
     output co,
     output s
   ){
-   sig i, j, k; // connector
    always{  
     s = a^b^ci;
-    i = a & b;
-    j = a & ci;
-    k = b & ci;
-    
-    co = i | j | k;
-  
+    co = (a&b)|((a^b)&ci);
   }
 }

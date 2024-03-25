@@ -17,7 +17,7 @@ module alu (
   always {
     // default values to silence errors 
     adder.a = a;
-    adder.b = a;
+    adder.b = b;
     zvn[2] = adder.z;
     zvn[1]  = adder.v;
     zvn[0]  = adder.n;
