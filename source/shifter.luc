@@ -1,0 +1,61 @@
+module shifter (
+    input a[32],
+    input b[5],
+    input alufn_signal[6],
+    output shift[32]
+  ) {
+  
+  //left shifters
+  x_bit_left_shifter ls16(#SHIFT(16),.shift(b[4]));
+  x_bit_left_shifter ls8(#SHIFT(8),.shift(b[3]));
+  x_bit_left_shifter ls4(#SHIFT(4),.shift(b[2]));
+  x_bit_left_shifter ls2(#SHIFT(2),.shift(b[1]));
+  x_bit_left_shifter ls1(#SHIFT(1),.shift(b[0]));
+  
+  //right shifters
+  x_bit_right_shifter rs16(#SHIFT(16),.shift(b[4]));
+  x_bit_right_shifter rs8(#SHIFT(8),.shift(b[3]));
+  x_bit_right_shifter rs4(#SHIFT(4),.shift(b[2]));
+  x_bit_right_shifter rs2(#SHIFT(2),.shift(b[1]));
+  x_bit_right_shifter rs1(#SHIFT(1),.shift(b[0]));
+  
+  //right shifter arithmetic
+  x_bit_right_shifter_arithmetic ras16(#SHIFT(16),.shift(b[4]));
+  x_bit_right_shifter_arithmetic ras8(#SHIFT(8),.shift(b[3]));
+  x_bit_right_shifter_arithmetic ras4(#SHIFT(4),.shift(b[2]));
+  x_bit_right_shifter_arithmetic ras2(#SHIFT(2),.shift(b[1]));
+  x_bit_right_shifter_arithmetic ras1(#SHIFT(1),.shift(b[0]));
+
+  always {
+    // default values to silence errors
+    //left
+    ls16.a = a;
+    ls8.a = ls16.out;
+    ls4.a = ls8.out;
+    ls2.a = ls4.out;
+    ls1.a = ls2.out;
+    
+    //right
+    rs16.a = a;
+    rs8.a = rs16.out;
+    rs4.a = rs8.out;
+    rs2.a = rs4.out;
+    rs1.a = rs2.out;
+    
+    //right arithmetic
+    ras16.a = a;
+    ras8.a = ras16.out;
+    ras4.a = ras8.out;
+    ras2.a = ras4.out;
+    ras1.a = ras2.out;
+    
+    case (alufn_signal[1:0]) {
+      b00: shift = ls1.out;
+      b01: shift = rs1.out;
+      b11: shift = ras1.out;
+      default:
+        shift = a;
+    }
+    
+  }
+}

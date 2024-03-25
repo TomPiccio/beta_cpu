@@ -1,0 +1,33 @@
+module adder #(
+  SIZE = 32 : SIZE <= 32
+)
+(
+  input a[SIZE],
+  input b[SIZE],
+  input alufn_signal[6],
+  output out[SIZE],
+  output z,
+  output v,
+  output n
+) {
+  fa fulladder[SIZE];
+  sig xb[SIZE];
+
+  always 
+  {
+    // SIZE bit adder 
+    fulladder.a = a;
+    xb =  b ^ SIZEx{alufn_signal[0]};
+    fulladder.b = xb;
+
+    fulladder.ci[0] = alufn_signal[0];
+    fulladder.ci[SIZE-1:1] = fulladder.co[SIZE-2:0];
+    out = fulladder.s;
+
+    // z v n
+    v = (a[SIZE-1] & xb[SIZE-1] & ~fulladder.s[SIZE-1]) | (~a[SIZE-1] & ~xb[SIZE-1] & fulladder.s[SIZE-1]);
+    z = ~|fulladder.s;
+    n = fulladder.s[SIZE-1];
+    
+  }
+}
